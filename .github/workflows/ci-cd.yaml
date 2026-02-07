@@ -1,0 +1,66 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      # Pulls code from GitHub repo
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+      # Ensures consistent Node version
+
+    - name: Install Dependencies
+      run: npm install
+      # Installs project dependencies
+
+    - name: Build App
+      run: echo "Node app build completed"
+      # Node apps don't compile, but step kept for CI standard
+
+    - name: Run Unit Tests
+      run: npm test
+      # Fails pipeline if tests fail
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: node-app
+        path: .
+      # Makes build reusable in next jobs
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Build Docker Image
+      run: |
+        docker build -t hello-world:latest .
+      # Builds Docker image
+
+  deploy:
+    needs: docker
+    runs-on: self-hosted
+    # 👈 IMPORTANT: This job runs on YOUR VM
+
+    steps:
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
+      # Deploys app to Minikube cluster
+
