@@ -3,7 +3,7 @@
 #bin-release/
 #[Oo]bj/
 #[Bb]in/
-
+actions-runner/
 # Other files and folders
 #.settings/
 
