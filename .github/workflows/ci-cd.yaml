@@ -58,6 +58,13 @@ jobs:
     # 👈 IMPORTANT: This job runs on YOUR VM
 
     steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      # This pulls the repository code onto the self-hosted runner
+
+    - name: Verify files exist
+      run: ls -l
+
     - name: Deploy to Kubernetes
       run: |
         ls -l
