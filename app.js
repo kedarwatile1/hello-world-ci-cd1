@@ -4,7 +4,7 @@ const app = express();
 
 // Simple health endpoint
 app.get('/', (req, res) => {
-  res.send('Hello World from CI-CD Pipeline 🚀');
+  res.send('Hello World from CI-CD Pipelinee 🚀');
 });
 
 module.exports = app;
